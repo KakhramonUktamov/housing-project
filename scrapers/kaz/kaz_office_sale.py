@@ -14,7 +14,7 @@ def kaz_office_sale():
     
     results = []
 
-    for page in flats:
+    for page in flats[:3]:
         response = requests.get(page)
         soup = BeautifulSoup(response.content, "html.parser")
 
