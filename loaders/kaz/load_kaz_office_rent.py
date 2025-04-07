@@ -9,7 +9,7 @@ def kaz_office_rent_loader(raw_data):
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
-        host="localhost",
+        host="192.168.14.229",
         port="5432",
         database="housing",
         user="postgres",

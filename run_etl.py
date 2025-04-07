@@ -105,21 +105,21 @@ logger.info("Starting")
 # if __name__ =="__main__":
 #     run_kaz_flat_rent()
 
-def run_kaz_office_sale():
-    raw_data = kaz_office_sale()
-    clean_data = kaz_office_sale_clean(raw_data)
-    kaz_office_sale_loader(clean_data)
+# def run_kaz_office_sale():
+#     raw_data = kaz_office_sale()
+#     clean_data = kaz_office_sale_clean(raw_data)
+#     kaz_office_sale_loader(clean_data)
 
-if __name__ =="__main__":
-    run_kaz_office_sale()
+# if __name__ =="__main__":
+#     run_kaz_office_sale()
 
 #Kazakhistan Office Rent
-# def run_kaz_office_rent():
-#     raw_data = kaz_office_rent()
-#     clean_data = kaz_office_rent_clean(raw_data)
-#     kaz_flat_rent_loader(clean_data)
+def run_kaz_office_rent():
+    raw_data = kaz_office_rent()
+    clean_data = kaz_office_rent_clean(raw_data)
+    kaz_office_rent_loader(clean_data)
 
-# if __name__ == "__main__":
-#     run_kaz_office_rent()
+if __name__ == "__main__":
+    run_kaz_office_rent()
 
 logger.info("Ending")
