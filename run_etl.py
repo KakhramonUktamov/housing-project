@@ -38,6 +38,22 @@ from scrapers.kaz.kaz_office_rent import kaz_office_rent
 from transformers.kaz.kaz_office_rent_cleaner import kaz_office_rent_clean
 from loaders.kaz.load_kaz_office_rent import kaz_office_rent_loader
 
+from scrapers.kir.kir_flat_sale import kir_flat_sale
+from transformers.kir.kir_flat_sale_cleaner import kir_flat_sale_clean
+from loaders.kir.load_kir_flat_sale import kir_flat_sale_loader
+
+from scrapers.kir.kir_flat_rent import kir_flat_rent
+from transformers.kir.kir_flat_rent_cleaner import kir_flat_rent_clean
+from loaders.kir.load_kir_flat_rent import kir_flat_rent_loader
+
+from scrapers.kir.kir_office_sale import kir_office_sale
+from transformers.kir.kir_office_sale_cleaner import kir_office_sale_clean
+from loaders.kir.load_kir_office_sale import kir_office_sale_loader
+
+from scrapers.kir.kir_office_rent import kir_office_rent
+from transformers.kir.kir_office_rent_cleaner import kir_office_rent_clean
+from loaders.kir.load_kir_office_rent import kir_office_rent_loader
+
 logger = setup_logger()
 logger.info("Starting")
 
@@ -105,13 +121,13 @@ logger.info("Starting")
 # if __name__ =="__main__":
 #     run_kaz_flat_rent()
 
-def run_kaz_office_sale():
-    raw_data = kaz_office_sale()
-    clean_data = kaz_office_sale_clean(raw_data)
-    kaz_office_sale_loader(clean_data)
+# def run_kaz_office_sale():
+#     raw_data = kaz_office_sale()
+#     clean_data = kaz_office_sale_clean(raw_data)
+#     kaz_office_sale_loader(clean_data)
 
-if __name__ =="__main__":
-    run_kaz_office_sale()
+# if __name__ =="__main__":
+#     run_kaz_office_sale()
 
 #Kazakhistan Office Rent
 # def run_kaz_office_rent():
@@ -121,5 +137,42 @@ if __name__ =="__main__":
 
 # if __name__ == "__main__":
 #     run_kaz_office_rent()
+
+# def run_kir_flat_sale():
+#     raw_data = kir_flat_sale()
+#     clean_data = kir_flat_sale_clean(raw_data)
+#     kir_flat_sale_loader(clean_data)
+
+# if __name__ == "__main__":
+#     run_kir_flat_sale()
+
+
+#Kirgizistan Flat Rent
+# def run_kir_flat_rent():
+#     raw_data = kir_flat_rent()
+#     clean_data = kir_flat_rent_clean(raw_data)
+#     kir_flat_rent_loader(clean_data)
+
+# if __name__ == "__main__":
+#     run_kir_flat_rent()
+
+#Kirgizistan Office Sale
+# def run_kir_office_sale():
+#     raw_data = kir_office_sale()
+#     clean_data = kir_office_sale_clean(raw_data)
+#     kir_office_sale_loader(clean_data)
+
+# if __name__ =="__main__":
+#     run_kir_office_sale()
+
+#Kirgizistan Office Rent
+# def run_kir_office_rent():
+#     raw_data = kir_office_rent()
+#     clean_data = kir_office_rent_clean(raw_data)
+#     kir_office_rent_loader(clean_data)
+
+# if __name__ =="__main__":
+#     run_kir_office_rent()
+
 
 logger.info("Ending")
