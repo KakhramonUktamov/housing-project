@@ -36,11 +36,14 @@ import pandas as pd
 
 
 
-from scrapers.kir.kir_flat_rent import kir_flat_rent
-from transformers.kir.kir_flat_rent_cleaner import kir_flat_rent_clean
-from loaders.kir.load_kir_flat_rent import kir_flat_rent_loader
+from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
+from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
+
+raw_data = uzb_flat_sale()
+df = uzb_flat_sale_clean(raw_data)
 
 
-raw_data = kir_flat_rent()
-clean_data = kir_flat_rent_clean(raw_data)
+# response = requests.get("https://www.olx.uz/d/obyavlenie/3-xonali-uy-sotiladi-vokzalni-oldida-ID3YPRx.html")
+# soup = BeautifulSoup(response.content, "html.parser")
+
 

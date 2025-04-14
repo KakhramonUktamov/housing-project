@@ -27,6 +27,7 @@ def size_clean(text):
     match = re.search(r"(\d+)\s*м²", text)
     return float(match.group(1)) if match else None
 
+
 def date_clean(text, reference_date=None):
     if not text:
         return None
@@ -68,7 +69,6 @@ def date_clean(text, reference_date=None):
         return (now - delta).date()
 
     return None
-
 
 def taj_flat_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
