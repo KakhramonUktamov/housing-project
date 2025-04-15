@@ -118,7 +118,7 @@ def location_clean(text):
         return None
 
 
-def uzb_flat_sale_clean(raw_data):
+def uzb_flat_rent_clean(raw_data):
     df = pd.DataFrame(raw_data)
 
     df['price'] = df['price_info'].apply(price_clean)
@@ -130,6 +130,6 @@ def uzb_flat_sale_clean(raw_data):
     df['date'] = df['loc'].apply(date_clean)
     df['currency'] = df['price_info'].apply(currency_clean)
     df['scrape_date'] = datetime.now().date()
-    df = df.drop(["title","loc","price_info"], axis=1)
+    df = df.drop(["title","loc", "price_info"], axis=1)
     
     return df

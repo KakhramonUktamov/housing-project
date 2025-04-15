@@ -82,15 +82,6 @@ def size_clean(info_list):
     return None
 
 
-def room_clean(info_list):
-    for item in info_list:
-        if "количество комнат" in item.lower():
-            try:
-                return int(item.split(":")[1].strip())
-            except:
-                return None
-    return None
-
 def floor_clean(info_list):
     for item in info_list:
         if item.lower().startswith("этаж:"):
@@ -118,11 +109,10 @@ def location_clean(text):
         return None
 
 
-def uzb_flat_sale_clean(raw_data):
+def uzb_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
 
     df['price'] = df['price_info'].apply(price_clean)
-    df['room'] = df['title'].apply(room_clean)
     df['location'] = df['loc'].apply(location_clean)
     df['house_floor'] = df['title'].apply(floor_clean)
     df['total_floor'] = df['title'].apply(house_floor)
