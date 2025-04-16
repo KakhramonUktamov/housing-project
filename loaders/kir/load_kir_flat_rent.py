@@ -5,15 +5,15 @@ from dotenv import load_dotenv
 def kir_flat_rent_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="../config/.env")
+    load_dotenv(dotenv_path="config/.env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
-        host="192.168.14.229",
-        port="5432",
-        database="housing",
-        user="postgres",
-        password="strong78361"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS")
     )
     cur = conn.cursor()
 
@@ -23,8 +23,8 @@ def kir_flat_rent_loader(raw_data):
     for _, row in df.iterrows():
         try:
             cur.execute("""
-                INSERT INTO housing.kir_flat_rent (price, date, location, room, house_floor, total_floor, size, scrape_date, link)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                INSERT INTO housing.kir_flat_rent (price, date, location, room, house_floor, total_floor, size, scrape_date, currency, link)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
             """, (
                 row.get("price"),
                 row.get("date"),
@@ -34,6 +34,7 @@ def kir_flat_rent_loader(raw_data):
                 row.get("total_floor"),
                 row.get("size"),
                 row.get("scrape_date"),
+                row.get("currency"),
                 row.get("link")
             ))
 

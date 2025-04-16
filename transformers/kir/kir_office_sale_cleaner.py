@@ -11,6 +11,12 @@ def price_clean(text):
     except ValueError:
         return None
 
+def currency_clean(text):
+    if not text:
+        return None
+    match = re.search(r"[^\d\s]+", text)
+    return match.group(0) if match else None
+
 def size_clean(text):
     match = re.search(r"(\d+)\s*м2", text)
     return float(match.group(1)) if match else None
@@ -60,11 +66,12 @@ def date_clean(text, reference_time=None):
 
 def kir_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
-    df['price'] = df['price'].apply(price_clean)
+    df['price'] = df['price_info'].apply(price_clean)
     df['size'] = df['title'].apply(size_clean)
     df['location'] = df['location_hs'].apply(location_clean)
     df['date'] = df['date'].apply(date_clean)
+    df['currency'] = df['price_info'].apply(currency_clean)
     df['scrape_date'] = datetime.now().date()
-    df = df.drop(["title","location_hs"], axis=1)
+    df = df.drop(["title","location_hs","price_info"], axis=1)
     
     return df

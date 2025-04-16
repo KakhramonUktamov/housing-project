@@ -1,42 +1,54 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
-url = "https://www.house.kg/snyat-kommercheskaia-nedvijimost?commercial_type=2&region=all&sort_by=upped_at+desc?page={}"
+url = "https://www.house.kg/snyat-kommercheskaia-nedvijimost?commercial_type=2&region=all&sort_by=upped_at+desc&page={}"
 
 def kir_office_rent():
-
-    response_page = requests.get(url.format(1))
-    page_soup = BeautifulSoup(response_page.content, "html.parser")
-    page_max = int(page_soup.find_all("a", class_="page-link")[-1]['data-page'])
-    
     results = []
 
+    try:
+        response_page = requests.get(url.format(1), timeout=10)
+        response_page.raise_for_status()
+        page_soup = BeautifulSoup(response_page.content, "html.parser")
+        page_max = int(page_soup.find_all("a", class_="page-link")[-1]['data-page'])
+    except:
+        page_max = 10
+
     for page in range(1, 4):
-
-        response = requests.get(url.format(page))
-        soup = BeautifulSoup(response.content, "html.parser")
-
-        cards = soup.find_all("div", class_="listing")
+        try:
+            response = requests.get(url.format(page), timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+            cards = soup.find_all("div", class_="listing")
+        except:
+            continue
 
         for card in cards:
+            try:
+                price = card.find("div", class_="price").get_text(strip=True)
+                title = card.find("p", class_="title").get_text(strip=True)
+                location = card.find("div", class_="address").get_text(strip=True)
+                date = card.find("div", class_="additional-info").get_text(strip=True)
+                link = card.find("p", class_="title").find('a')['href']
 
-            price = card.find("div", class_="price").get_text(strip=True)
-            title = card.find("p", class_="title").get_text(strip=True)
-            location = card.find("div", class_="address").get_text(strip=True)
-            date = card.find("div", class_="additional-info").get_text(strip=True)
-            link = card.find("p", class_="title").find('a')['href']
+                result = {
+                    "price_info": price,
+                    "title": title,
+                    "location_hs": location,
+                    "date": date,
+                    "link": f"https://www.house.kg{link}"
+                }
 
-            result = {
-                "price": price,
-                "title": title,
-                "location_hs": location,
-                "date": date,
-                "link": "house.kg{}".format(link)
-            }
+                results.append(result)
+            except:
+                continue
 
-            results.append(result)
-    
+        time.sleep(1)
+
+    print("Scraping kir_office_rent completed successfully.")
     return results
+
 
 
 

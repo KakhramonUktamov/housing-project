@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 def kaz_office_sale_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="../config/.env")
+    load_dotenv(dotenv_path="config/.env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
@@ -23,13 +23,14 @@ def kaz_office_sale_loader(raw_data):
     for _, row in df.iterrows():
         try:
             cur.execute("""
-                INSERT INTO housing.kaz_office_sale (price, date, location, size, scrape_date)
-                VALUES (%s, %s, %s, %s, %s);
+                INSERT INTO housing.kaz_office_sale (price, date, location, size, currency, scrape_date)
+                VALUES (%s, %s, %s, %s, %s, %s);
             """, (
                 row.get("price"),
                 row.get("date"),
                 row.get("location"),
                 row.get("size"),
+                row.get("currency"),
                 row.get("scrape_date")
             ))
 

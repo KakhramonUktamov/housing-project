@@ -35,12 +35,11 @@ import pandas as pd
 # df = pd.DataFrame(results)
 
 
+from scrapers.rus.rus_office_sale import rus_office_sale
+from transformers.rus.rus_office_sale_cleaner import rus_office_sale_clean
 
-from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
-from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
-
-raw_data = uzb_flat_sale()
-df = uzb_flat_sale_clean(raw_data)
+raw_data = rus_office_sale(max_pages=1)
+df = rus_office_sale_clean(raw_data)
 
 
 # response = requests.get("https://www.olx.uz/d/obyavlenie/3-xonali-uy-sotiladi-vokzalni-oldida-ID3YPRx.html")

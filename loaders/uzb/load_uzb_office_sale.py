@@ -5,15 +5,15 @@ from dotenv import load_dotenv
 def uzb_office_sale_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="../config/.env")
+    load_dotenv(dotenv_path="config/.env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
-        host="192.168.14.229",
-        port="5432",
-        database="housing",
-        user="postgres",
-        password="strong78361"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS")
     )
     cur = conn.cursor()
 

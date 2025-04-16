@@ -1,10 +1,18 @@
-import json
+
 import pandas as pd
 from utils.logger import setup_logger
 
-from scrapers.rus.russia_apart_sale import scrape_avito
-from transformers.rus.russia_apart_sale_cleaner import clean_data
-from loaders.rus.load_to_posgresql import database_loader
+from scrapers.rus.rus_flat_sale import rus_flat_sale
+from transformers.rus.rus_flat_sale_cleaner import rus_flat_sale_clean
+from loaders.rus.load_rus_flat_sale import rus_flat_sale_loader
+
+from scrapers.rus.rus_flat_rent import rus_flat_rent
+from transformers.rus.rus_flat_rent_cleaner import rus_flat_rent_clean
+from loaders.rus.load_rus_rent_sale import rus_flat_rent_loader
+
+from scrapers.rus.rus_office_sale import rus_office_sale
+from transformers.rus.rus_office_sale_cleaner import rus_office_sale_clean
+from loaders.rus.load_rus_office_sale import rus_office_sale_loader
 
 from scrapers.taj.taj_flat_sale import taj_flat_sale
 from transformers.taj.taj_flat_sale_cleaner import taj_flat_sale_clean
@@ -54,18 +62,51 @@ from scrapers.kir.kir_office_rent import kir_office_rent
 from transformers.kir.kir_office_rent_cleaner import kir_office_rent_clean
 from loaders.kir.load_kir_office_rent import kir_office_rent_loader
 
+from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
+from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
+from loaders.uzb.load_uzb_flat_sale import uzb_flat_sale_loader
+
+from scrapers.uzb.uzb_flat_rent import uzb_flat_rent
+from transformers.uzb.uzb_flat_rent_cleaner import uzb_flat_rent_clean
+from loaders.uzb.load_uzb_flat_rent import uzb_flat_rent_loader
+
+from scrapers.uzb.uzb_office_sale import uzb_office_sale
+from transformers.uzb.uzb_office_sale_cleaner import uzb_office_sale_clean
+from loaders.uzb.load_uzb_office_sale import uzb_office_sale_loader
+
+from scrapers.uzb.uzb_office_rent import uzb_office_rent
+from transformers.uzb.uzb_office_rent_cleaner import uzb_office_rent_clean
+from loaders.uzb.load_uzb_office_rent import uzb_office_rent_loader
+
 logger = setup_logger()
 logger.info("Starting")
 
-#Russian Apartment Sale
-# def run_avito():
-#     raw_data = scrape_avito(max_pages=3)
-#     cleaned_data = clean_data(raw_data)
-#     database_loader(cleaned_data)
+# #Russian Apartment Sale
+# def run_rus_flat_sale():
+#     raw_data = rus_flat_sale(max_pages=2)
+#     cleaned_data = rus_flat_sale_clean(raw_data)
+#     rus_flat_sale_loader(cleaned_data)
 
 # if __name__ == "__main__":
-#     run_avito()
+#     run_rus_flat_sale()
 
+# #Russian Flat Rent
+# def run_rus_flat_rent():
+#     raw_data = rus_flat_rent(max_pages=2)
+#     clean_data = rus_flat_rent_clean(raw_data)
+#     rus_flat_rent_loader(clean_data)
+
+# if __name__=="__main__":
+#     run_rus_flat_rent()
+
+#Russian Office Sale
+def run_rus_office_sale():
+    raw_data = rus_office_sale(max_pages=2)
+    clean_data = rus_office_sale_clean(raw_data)
+    rus_office_sale_loader(clean_data)
+
+if __name__=="__main__":
+    run_rus_office_sale()
 
 # #Tajikistan Apartment Sale
 # def run_taj_flat_sale():
@@ -85,7 +126,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_taj_flat_rent()
 
-#Tajikistan Office Rent
+# #Tajikistan Office Rent
 # def run_taj_office_rent():
 #     raw_data = taj_office_rent()
 #     clean_data = taj_office_rent_clean(raw_data)
@@ -94,7 +135,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_taj_office_rent()
 
-#Tajikistan Office Sale
+# #Tajikistan Office Sale
 # def run_taj_office_sale():
 #     raw_data = taj_office_sale()
 #     clean_data = taj_office_sale_clean(raw_data)
@@ -103,7 +144,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_taj_office_sale()
 
-#Kazakhistan Flat Sale
+# #Kazakhistan Flat Sale
 # def run_kaz_flat_sale():
 #     raw_data = kaz_flat_sale()
 #     clean_data = kaz_flat_sale_clean(raw_data)
@@ -112,7 +153,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_kaz_flat_sale()
 
-#Kazakhistan Flat Rent
+# #Kazakhistan Flat Rent
 # def run_kaz_flat_rent():
 #     raw_data = kaz_flat_rent()
 #     clean_data = kaz_flat_rent_clean(raw_data)
@@ -129,7 +170,7 @@ logger.info("Starting")
 # if __name__ =="__main__":
 #     run_kaz_office_sale()
 
-#Kazakhistan Office Rent
+# #Kazakhistan Office Rent
 # def run_kaz_office_rent():
 #     raw_data = kaz_office_rent()
 #     clean_data = kaz_office_rent_clean(raw_data)
@@ -138,6 +179,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_kaz_office_rent()
 
+# #Kirgizistan Flat Sale
 # def run_kir_flat_sale():
 #     raw_data = kir_flat_sale()
 #     clean_data = kir_flat_sale_clean(raw_data)
@@ -147,7 +189,7 @@ logger.info("Starting")
 #     run_kir_flat_sale()
 
 
-#Kirgizistan Flat Rent
+# #Kirgizistan Flat Rent
 # def run_kir_flat_rent():
 #     raw_data = kir_flat_rent()
 #     clean_data = kir_flat_rent_clean(raw_data)
@@ -156,7 +198,7 @@ logger.info("Starting")
 # if __name__ == "__main__":
 #     run_kir_flat_rent()
 
-#Kirgizistan Office Sale
+# #Kirgizistan Office Sale
 # def run_kir_office_sale():
 #     raw_data = kir_office_sale()
 #     clean_data = kir_office_sale_clean(raw_data)
@@ -165,7 +207,7 @@ logger.info("Starting")
 # if __name__ =="__main__":
 #     run_kir_office_sale()
 
-#Kirgizistan Office Rent
+# #Kirgizistan Office Rent
 # def run_kir_office_rent():
 #     raw_data = kir_office_rent()
 #     clean_data = kir_office_rent_clean(raw_data)
@@ -175,53 +217,37 @@ logger.info("Starting")
 #     run_kir_office_rent()
 
 
-from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
-from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
-from loaders.uzb.load_uzb_flat_sale import uzb_flat_sale_loader
+# def run_uzb_flat_sale():
+#     raw_data = uzb_flat_sale()
+#     clean_data = uzb_flat_sale_clean(raw_data)
+#     uzb_flat_sale_loader(clean_data)
 
-from scrapers.uzb.uzb_flat_rent import uzb_flat_rent
-from transformers.uzb.uzb_flat_rent_cleaner import uzb_flat_rent_clean
-from loaders.uzb.load_uzb_flat_rent import uzb_flat_rent_loader
-
-from scrapers.uzb.uzb_office_sale import uzb_office_sale
-from transformers.uzb.uzb_office_sale_cleaner import uzb_office_sale_clean
-from loaders.uzb.load_uzb_office_sale import uzb_office_sale_loader
-
-from scrapers.uzb.uzb_office_rent import uzb_office_rent
-from transformers.uzb.uzb_office_rent_cleaner import uzb_office_rent_clean
-from loaders.uzb.load_uzb_office_rent import uzb_office_rent_loader
-
-def run_uzb_flat_sale():
-    raw_data = uzb_flat_sale()
-    clean_data = uzb_flat_sale_clean(raw_data)
-    uzb_flat_sale_loader(clean_data)
-
-if __name__=="__main__":
-    run_uzb_flat_sale()
+# if __name__=="__main__":
+#     run_uzb_flat_sale()
 
 
-def run_uzb_flat_rent():
-    raw_data = uzb_flat_rent()
-    clean_data = uzb_flat_rent_clean(raw_data)
-    uzb_flat_rent_loader(clean_data)
+# def run_uzb_flat_rent():
+#     raw_data = uzb_flat_rent()
+#     clean_data = uzb_flat_rent_clean(raw_data)
+#     uzb_flat_rent_loader(clean_data)
 
-if __name__=="__main__":
-    run_uzb_flat_rent()
+# if __name__=="__main__":
+#     run_uzb_flat_rent()
 
-def run_uzb_office_sale():
-    raw_data = uzb_office_sale()
-    clean_data = uzb_office_sale_clean(raw_data)
-    uzb_office_sale_loader(clean_data)
+# def run_uzb_office_sale():
+#     raw_data = uzb_office_sale()
+#     clean_data = uzb_office_sale_clean(raw_data)
+#     uzb_office_sale_loader(clean_data)
 
-if __name__=="__main__":
-    run_uzb_office_sale()
+# if __name__=="__main__":
+#     run_uzb_office_sale()
 
-def run_uzb_office_rent():
-    raw_data = uzb_office_rent()
-    clean_data = uzb_office_rent_clean(raw_data)
-    uzb_office_rent_loader(clean_data)
+# def run_uzb_office_rent():
+#     raw_data = uzb_office_rent()
+#     clean_data = uzb_office_rent_clean(raw_data)
+#     uzb_office_rent_loader(clean_data)
 
-if __name__=="__main__":
-    run_uzb_office_rent()
+# if __name__=="__main__":
+#     run_uzb_office_rent()
 
 logger.info("Ending")

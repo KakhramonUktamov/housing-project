@@ -9,11 +9,11 @@ def kaz_office_rent_loader(raw_data):
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
-        host="192.168.14.229",
-        port="5432",
-        database="housing",
-        user="postgres",
-        password="strong78361"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS")
     )
     cur = conn.cursor()
 
@@ -23,13 +23,14 @@ def kaz_office_rent_loader(raw_data):
     for _, row in df.iterrows():
         try:
             cur.execute("""
-                INSERT INTO housing.kaz_office_rent (price, date, location, size, scrape_date)
-                VALUES (%s, %s, %s, %s, %s);
+                INSERT INTO housing.kaz_office_rent (price, date, location, size, currency, scrape_date)
+                VALUES (%s, %s, %s, %s, %s, %s);
             """, (
                 row.get("price"),
                 row.get("date"),
                 row.get("location"),
                 row.get("size"),
+                row.get("currency"),
                 row.get("scrape_date")
             ))
 

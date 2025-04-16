@@ -4,18 +4,18 @@ import psycopg2
 import pandas as pd
 from dotenv import load_dotenv
 
-def database_loader(raw_data):
+def rus_flat_rent_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="../config/.env")
+    load_dotenv(dotenv_path="config/.env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(
-        host="localhost",
-        port="5432",
-        database="housing",
-        user="postgres",
-        password="strong78361"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS")
     )
     cur = conn.cursor()
 
@@ -25,17 +25,18 @@ def database_loader(raw_data):
     for _, row in df.iterrows():
         try:
             cur.execute("""
-                INSERT INTO housing.rus_flat_sale (price, location, seller, date, room, size, house_floor, total_floor)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                INSERT INTO housing.rus_flat_rent (price, location, date, room, size, house_floor, total_floor, currency, scrape_date)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
             """, (
                 row.get("price"),
                 row.get("location"),
-                row.get("seller"),
                 row.get("date"),
                 row.get("room"),
                 row.get("size"),
-                int(row.get("house_floor")) if pd.notnull(row.get("house_floor")) else None,
-                row.get("total_floor")
+                row.get("house_floor"),
+                row.get("total_floor"),
+                row.get("currency"),
+                row.get("scrape_date")
             ))
         except Exception as e:
             print("❌ Skipping invalid row:", row.to_dict())
