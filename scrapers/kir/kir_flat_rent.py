@@ -15,7 +15,7 @@ def kir_flat_rent():
     except:
         page_max = 25
 
-    for page in range(1, 4):
+    for page in range(1, page_max):
         try:
             response = requests.get(url.format(page), timeout=10)
             response.raise_for_status()

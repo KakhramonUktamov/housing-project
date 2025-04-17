@@ -17,7 +17,7 @@ def kaz_flat_sale():
 
     flats = [url.format(i) for i in range(1, n_pages if n_pages else 2)]
 
-    for page in flats[:4]:
+    for page in flats:
         try:
             response = requests.get(page, timeout=10)
             response.raise_for_status()

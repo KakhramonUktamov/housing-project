@@ -75,7 +75,7 @@ def uzb_office_rent():
     flat_links = []
     # Step 1: Fetch all listing URLs
     with ThreadPoolExecutor(max_workers=20) as executor:
-        for links in executor.map(fetch_office_links, page_links[:10]):  # test limit
+        for links in executor.map(fetch_office_links, page_links):  # test limit
             flat_links.extend(links)
 
     results = []

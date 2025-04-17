@@ -75,7 +75,7 @@ def uzb_office_sale():
     flat_links = []
     # Step 1: Fetch all listing URLs
     with ThreadPoolExecutor(max_workers=20) as executor:
-        for links in executor.map(fetch_office_sale_links, page_links[:10]):  # test with first 10
+        for links in executor.map(fetch_office_sale_links, page_links):  # test with first 10
             flat_links.extend(links)
 
     results = []

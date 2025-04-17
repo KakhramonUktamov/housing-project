@@ -20,7 +20,7 @@ def clean_text(text):
 
 
 
-def rus_flat_rent(max_pages=5):
+def rus_flat_rent(max_pages=100):
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--disable-blink-features=AutomationControlled")
@@ -52,22 +52,25 @@ def rus_flat_rent(max_pages=5):
         cards = soup.find_all("div", class_="iva-item-root-Se7z4")
 
         for card in cards:
-            title_tag = card.find("div", class_="iva-item-title-CdRXl")
-            price_tag = card.find("div", class_="price-priceContent-kPm_N")
-            location_tag = card.find("div", class_="geo-root-NrkbV")
-            date_tag = card.find("div", class_="iva-item-dateInfoStep-qcDJA")
+            try:
+                title_tag = card.find("div", class_="iva-item-title-CdRXl")
+                price_tag = card.find("div", class_="price-priceContent-kPm_N")
+                location_tag = card.find("div", class_="geo-root-NrkbV")
+                date_tag = card.find("div", class_="iva-item-dateInfoStep-qcDJA")
 
-            result = {
-                "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
-                "price_info": clean_text(price_tag.get_text()) if price_tag else "N/A",
-                "location": clean_text(location_tag.get_text()) if location_tag else "N/A",
-                "date": clean_text(date_tag.get_text()) if date_tag else "N/A",
-            }
-            results.append(result)
+                result = {
+                    "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
+                    "price_info": clean_text(price_tag.get_text()) if price_tag else "N/A",
+                    "location": clean_text(location_tag.get_text()) if location_tag else "N/A",
+                    "date": clean_text(date_tag.get_text()) if date_tag else "N/A",
+                }
+                results.append(result)
+
+            except Exception as e:
+                continue
 
         time.sleep(random.uniform(3, 6))
 
     driver.quit()
-    print("✅ Scraping rus_flat_rent completed successfully.")
     print(f"Total listings scraped: {len(results)}")
     return results

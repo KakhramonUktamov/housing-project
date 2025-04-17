@@ -1,0 +1,89 @@
+import pandas as pd
+import re
+from datetime import datetime
+import dateparser
+
+
+def clean_size(text):
+    if not text:
+        return None
+    try:
+        # Normalize text (replace commas with dots, and handle different square meter symbols)
+        text = text.replace(",", ".").replace("\xa0", " ").replace("\u202f", " ")
+        match = re.search(r"(\d+(?:\.\d+)?)\s*(м²|м2)", text, re.IGNORECASE)
+        return float(match.group(1)) if match else None
+    except Exception:
+        return None
+
+
+def clean_price(text):
+    if not text:
+        return None
+    try:
+        return int(re.sub(r"[^\d]", "", text))
+    except ValueError:
+        return None
+
+def clean_price_sqm(text):
+    if not text:
+        return None
+    try:
+        # Remove all non-digit characters for the number part
+        price_match = re.search(r"([\d\s]+)", text)
+        if not price_match:
+            return None
+
+        price_str = re.sub(r"[^\d]", "", price_match.group(1))
+        price = int(price_str)
+
+        # Determine if it's per month or per year
+        if "год" in text.lower():
+            return round(price / 12)
+        elif "месяц" in text.lower():
+            return price
+        else:
+            return price  # default to returning as-is if time period not mentioned
+    except Exception as e:
+        return None
+    
+def clean_currency(text):
+    if not text:
+        return None
+    match = re.search(r"[^\d\s]+", text)
+    return match.group(0) if match else None
+
+
+def clean_date(text):
+    if not text:
+        return None
+    parsed = dateparser.parse(text, settings={'PREFER_DATES_FROM': 'past'})
+    return parsed.date().isoformat() if parsed else text.strip()
+
+
+def clean_location(text):
+    if not text:
+        return None
+    loc = text.split(',')[0].strip()
+    replacements = {
+        "обл.": "область",
+        "респ.": "республика",
+        "край.": "край",
+        "г.": "",
+    }
+    for short, full in replacements.items():
+        loc = loc.replace(short, full)
+    return loc
+
+
+def rus_office_rent_clean(raw_data):
+    df = pd.DataFrame(raw_data)
+    df['price'] = df['price_info'].apply(clean_price)
+    df['price_sqm'] = df['price_sqm'].apply(clean_price_sqm)
+    df['size'] = df['price']/df['price_sqm']
+    df['currency'] = df['price_info'].apply(clean_currency)
+    df['date'] = df['date'].apply(clean_date)
+    df['location'] = df['location'].apply(clean_location)
+    df['scrape_date'] = datetime.now().date()
+    df.drop(columns=['title',"price_info","price_sqm"], inplace=True, errors='ignore')
+
+    return df

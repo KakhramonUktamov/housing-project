@@ -17,7 +17,7 @@ def taj_flat_rent():
 
     flat_pages = [url.format(index) for index in range(1, min(max_page + 1, 6))]
 
-    for page_url in flat_pages[:5]:
+    for page_url in flat_pages:
         try:
             response = requests.get(page_url, timeout=10)
             response.raise_for_status()

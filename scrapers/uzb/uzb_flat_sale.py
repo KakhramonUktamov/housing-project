@@ -68,7 +68,7 @@ def scrape_flat_details(item):
 def uzb_flat_sale():
     # Step 1: Collect all flat links
     all_flat_links = []
-    for page_link in page_links[:4]:
+    for page_link in page_links:
         all_flat_links.extend(get_flat_links(page_link))
 
     # Step 2: Fetch flat details concurrently

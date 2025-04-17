@@ -7,9 +7,13 @@ import dateparser
 def clean_size(text):
     if not text:
         return None
-    match = re.search(r"(\d+(\.\d+)?)\s?м²", text)
-    return float(match.group(1)) if match else None
-
+    try:
+        # Normalize text (replace commas with dots, and handle different square meter symbols)
+        text = text.replace(",", ".").replace("\xa0", " ").replace("\u202f", " ")
+        match = re.search(r"(\d+(?:\.\d+)?)\s*(м²|м2)", text, re.IGNORECASE)
+        return float(match.group(1)) if match else None
+    except Exception:
+        return None
 
 def clean_price(text):
     if not text:
@@ -58,13 +62,13 @@ def clean_location(text):
 
 def rus_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
-    df['size'] = df['title'].apply(clean_size)
     df['price'] = df['price_info'].apply(clean_price)
     df['price_sqm'] = df['price_sqm'].apply(clean_price_sqm)
+    df['size'] = df['price']/df['price_sqm']
     df['currency'] = df['price_info'].apply(clean_currency)
     df['date'] = df['date'].apply(clean_date)
     df['location'] = df['location'].apply(clean_location)
     df['scrape_date'] = datetime.now().date()
-    df.drop(columns=['title',"price_info"], inplace=True, errors='ignore')
+    df.drop(columns=['title',"price_info","price_sqm"], inplace=True, errors='ignore')
 
     return df

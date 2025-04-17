@@ -30,8 +30,15 @@ def floor_clean(text):
 
 
 def size_clean(text):
-    match = re.search(r"(\d+)\s*м²", text)
-    return float(match.group(1)) if match else None
+    if not text:
+        return None
+    try:
+        # Normalize text (replace commas with dots, and handle different square meter symbols)
+        text = text.replace(",", ".").replace("\xa0", " ").replace("\u202f", " ")
+        match = re.search(r"(\d+(?:\.\d+)?)\s*(м²|м2)", text, re.IGNORECASE)
+        return float(match.group(1)) if match else None
+    except Exception:
+        return None
 
 
 def date_clean(text, reference_date=None):

@@ -75,7 +75,7 @@ def uzb_flat_rent():
     # Phase 1: Get all listing links concurrently
     flat_links = []
     with ThreadPoolExecutor(max_workers=20) as executor:
-        for results in executor.map(fetch_listing_links, page_links[:10]):  # Adjust slice for testing
+        for results in executor.map(fetch_listing_links, page_links):  # Adjust slice for testing
             flat_links.extend(results)
 
     # Phase 2: Fetch all listing details concurrently

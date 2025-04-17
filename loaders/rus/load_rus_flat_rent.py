@@ -39,8 +39,8 @@ def rus_flat_rent_loader(raw_data):
                 row.get("scrape_date")
             ))
         except Exception as e:
-            print("❌ Skipping invalid row:", row.to_dict())
-            print("→ Error:", e)
+            print("Skipping invalid row:", row.to_dict())
+            print("Error:", e)
             conn.rollback()  # rollback current failed INSERT to keep session clean
             continue
 
@@ -49,5 +49,5 @@ def rus_flat_rent_loader(raw_data):
     cur.close()
     conn.close()
 
-    print("✅ Data inserted into PostgreSQL.")
+    print("Data inserted into PostgreSQL.")
     print("Connecting to DB:", os.getenv("DB_NAME"), os.getenv("DB_USER"))
