@@ -60,21 +60,21 @@ def main():
 
     # === Grouped ETL functions by country ===
     country_etl_tasks = {
-        # "Tajikistan": [
-        #     run_taj_flat_sale, run_taj_flat_rent, run_taj_office_rent, run_taj_office_sale
-        # ],
-        # "Kazakhstan": [
-        #     run_kaz_flat_sale, run_kaz_flat_rent, run_kaz_office_sale, run_kaz_office_rent
-        # ],
-        # "Kyrgyzstan": [
-        #     run_kir_flat_sale, run_kir_flat_rent, run_kir_office_sale, run_kir_office_rent
-        # ],
+        "Tajikistan": [
+            run_taj_flat_sale, run_taj_flat_rent, run_taj_office_rent, run_taj_office_sale
+        ],
+        "Kazakhstan": [
+            run_kaz_flat_sale, run_kaz_flat_rent, run_kaz_office_sale, run_kaz_office_rent
+        ],
+        "Kyrgyzstan": [
+            run_kir_flat_sale, run_kir_flat_rent, run_kir_office_sale, run_kir_office_rent
+        ],
         "Uzbekistan": [
-           run_uzb_flat_rent, run_uzb_office_sale, run_uzb_office_rent
+           run_uzb_flat_sale, run_uzb_flat_rent, run_uzb_office_sale, run_uzb_office_rent
          ],
-    #     "Russia": [
-    #         run_rus_flat_sale, run_rus_flat_rent, run_rus_office_sale, run_rus_office_rent
-    #     ],
+        "Russia": [
+            run_rus_flat_sale, run_rus_flat_rent, run_rus_office_sale, run_rus_office_rent
+        ],
      }
 
     logger.info(" Starting parallel ETL execution by country")
