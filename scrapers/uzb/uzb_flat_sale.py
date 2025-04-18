@@ -6,13 +6,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 url_template = "https://www.olx.uz/nedvizhimost/kvartiry/prodazha/{location}/?currency=UYE&page={page}&search%5Border%5D=created_at:desc&search%5Bfilter_float_number_of_rooms:from%5D={room}&search%5Bfilter_enum_type_of_market%5D%5B0%5D={type}&view=list"
 
 property_type = ['primary', 'secondary']
-locations = ['tashkent', "toshkent-oblast", "andizhanskaya-oblast", "buharskaya-oblast", "dzhizakskaya-oblast",
+locations = ["toshkent-oblast", "andizhanskaya-oblast", "buharskaya-oblast", "dzhizakskaya-oblast",
              "karakalpakstan", "kashkadarinskaya-oblast", "navoijskaya-oblast", "namanganskaya-oblast",
              "samarkandskaya-oblast", "surhandarinskaya-oblast", "syrdarinskaya-oblast", "ferganskaya-oblast",
              "horezmskaya-oblast"]
 
 rooms = [1, 2, 3, 4, 5]
-pages = range(1, 26)
+pages = range(1, 6)
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
@@ -27,7 +27,7 @@ page_links = [
 def get_flat_links(page_link):
     flat_links = []
     try:
-        response = requests.get(page_link, headers=headers, timeout=10)
+        response = requests.get(page_link, headers=headers, timeout=5)
         soup = BeautifulSoup(response.content, "html.parser")
 
         cards = soup.find_all("div", class_="css-l9drzq")
@@ -68,12 +68,14 @@ def scrape_flat_details(item):
 def uzb_flat_sale():
     # Step 1: Collect all flat links
     all_flat_links = []
-    for page_link in page_links:
-        all_flat_links.extend(get_flat_links(page_link))
+    with ThreadPoolExecutor(max_workers=20) as executor:
+        futures = [executor.submit(get_flat_links, link) for link in page_links]
+        for future in as_completed(futures):
+            all_flat_links.extend(future.result())
 
     # Step 2: Fetch flat details concurrently
     results = []
-    with ThreadPoolExecutor(max_workers=30) as executor:
+    with ThreadPoolExecutor(max_workers=20) as executor:
         futures = [executor.submit(scrape_flat_details, item) for item in all_flat_links]
         for future in as_completed(futures):
             result = future.result()

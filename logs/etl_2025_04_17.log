@@ -4,3 +4,57 @@
 2025-04-17 10:43:27,024 | INFO | Ending
 2025-04-17 10:51:06,423 | INFO | Starting
 2025-04-17 10:54:19,853 | INFO | Ending
+2025-04-17 13:23:10,945 | INFO |  Starting parallel ETL execution by country
+2025-04-17 13:23:10,945 | INFO | Starting ETL for Tajikistan
+2025-04-17 13:23:10,946 | INFO | Running: run_taj_flat_sale
+2025-04-17 13:23:10,946 | INFO | Starting ETL for Kazakhstan
+2025-04-17 13:23:10,946 | INFO | Starting ETL for Kyrgyzstan
+2025-04-17 13:23:10,946 | INFO | Running: run_kaz_flat_sale
+2025-04-17 13:23:10,946 | INFO | Starting ETL for Uzbekistan
+2025-04-17 13:23:10,946 | INFO | Running: run_kir_flat_sale
+2025-04-17 13:23:10,946 | INFO | Starting ETL for Russia
+2025-04-17 13:23:10,947 | INFO | Running: run_uzb_flat_sale
+2025-04-17 13:23:10,947 | INFO | Running: run_rus_flat_sale
+2025-04-17 13:26:41,019 | INFO |  Starting parallel ETL execution by country
+2025-04-17 13:26:41,020 | INFO | Starting ETL for Tajikistan
+2025-04-17 13:26:41,020 | INFO | Running: run_taj_flat_sale
+2025-04-17 13:26:41,020 | INFO | Starting ETL for Kazakhstan
+2025-04-17 13:26:41,020 | INFO | Running: run_kaz_flat_sale
+2025-04-17 13:26:41,021 | INFO | Starting ETL for Kyrgyzstan
+2025-04-17 13:26:41,021 | INFO | Running: run_kir_flat_sale
+2025-04-17 13:26:41,022 | INFO | Starting ETL for Uzbekistan
+2025-04-17 13:26:41,022 | INFO | Running: run_uzb_flat_sale
+2025-04-17 13:26:41,022 | INFO | Starting ETL for Russia
+2025-04-17 13:26:41,023 | INFO | Running: run_rus_flat_sale
+2025-04-17 13:38:06,029 | INFO | Completed: run_taj_flat_sale in 685.01 seconds
+2025-04-17 13:38:06,029 | INFO | Running: run_taj_flat_rent
+2025-04-17 13:38:33,616 | INFO | Completed: run_taj_flat_rent in 27.59 seconds
+2025-04-17 13:38:33,616 | INFO | Running: run_taj_office_rent
+2025-04-17 13:38:43,309 | INFO | Completed: run_taj_office_rent in 9.69 seconds
+2025-04-17 13:38:43,309 | INFO | Running: run_taj_office_sale
+2025-04-17 13:39:02,555 | INFO | Completed: run_taj_office_sale in 19.25 seconds
+2025-04-17 13:39:02,555 | INFO | Finished ETL for Tajikistan in 741.53 seconds
+2025-04-17 13:44:50,898 | INFO | Completed: run_rus_flat_sale in 1089.88 seconds
+2025-04-17 13:44:50,899 | INFO | Running: run_rus_flat_rent
+2025-04-17 14:03:32,069 | INFO | Completed: run_rus_flat_rent in 1121.17 seconds
+2025-04-17 14:03:32,069 | INFO | Running: run_rus_office_sale
+2025-04-17 14:03:33,213 | INFO | Completed: run_kaz_flat_sale in 2212.19 seconds
+2025-04-17 14:03:33,213 | INFO | Running: run_kaz_flat_rent
+2025-04-17 14:18:26,537 | INFO | Completed: run_rus_office_sale in 894.47 seconds
+2025-04-17 14:18:26,538 | INFO | Running: run_rus_office_rent
+2025-04-17 14:18:56,871 | INFO | Completed: run_kir_flat_sale in 3135.85 seconds
+2025-04-17 14:18:56,871 | INFO | Running: run_kir_flat_rent
+2025-04-17 14:22:37,445 | INFO | Completed: run_kir_flat_rent in 220.57 seconds
+2025-04-17 14:22:37,445 | INFO | Running: run_kir_office_sale
+2025-04-17 14:23:30,615 | INFO | Completed: run_kir_office_sale in 53.17 seconds
+2025-04-17 14:23:30,615 | INFO | Running: run_kir_office_rent
+2025-04-17 14:24:21,773 | INFO | Completed: run_kir_office_rent in 51.16 seconds
+2025-04-17 14:24:21,773 | INFO | Finished ETL for Kyrgyzstan in 3460.75 seconds
+2025-04-17 14:33:19,277 | INFO | Completed: run_rus_office_rent in 892.74 seconds
+2025-04-17 14:33:19,277 | INFO | Finished ETL for Russia in 3998.25 seconds
+2025-04-17 14:38:52,091 | INFO | Completed: run_kaz_flat_rent in 2118.88 seconds
+2025-04-17 14:38:52,091 | INFO | Running: run_kaz_office_sale
+2025-04-17 14:52:03,382 | INFO | Completed: run_kaz_office_sale in 791.29 seconds
+2025-04-17 14:52:03,383 | INFO | Running: run_kaz_office_rent
+2025-04-17 15:07:55,368 | INFO | Completed: run_kaz_office_rent in 951.99 seconds
+2025-04-17 15:07:55,368 | INFO | Finished ETL for Kazakhstan in 6074.35 seconds

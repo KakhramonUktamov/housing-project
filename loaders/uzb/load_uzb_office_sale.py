@@ -1,6 +1,12 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
+import math
+
+def clean_value(val):
+    if isinstance(val, float) and math.isnan(val):
+        return None
+    return val
 
 def uzb_office_sale_loader(raw_data):
     
@@ -22,23 +28,28 @@ def uzb_office_sale_loader(raw_data):
     # Insert into DB
     for _, row in df.iterrows():
         try:
+            cleaned = {k: clean_value(v) for k, v in row.to_dict().items()}
+
             cur.execute("""
                 INSERT INTO housing.uzb_office_sale (price, date, location, house_floor, total_floor, size, currency, scrape_date)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
             """, (
-                row.get("price"),
-                row.get("date"),
-                row.get("location"),
-                row.get("house_floor"),
-                row.get("total_floor"),
-                row.get("size"),
-                row.get("currency"),
-                row.get("scrape_date")
+                cleaned["price"],
+                cleaned["date"],
+                cleaned["location"],
+                cleaned["house_floor"],
+                cleaned["total_floor"],
+                cleaned["size"],
+                cleaned["currency"],
+                cleaned["scrape_date"]
             ))
+
         except Exception as e:
             print("Failed row:")
             print(row.to_dict())
             print("Error:", e)
+            conn.rollback()
+
 
 
 

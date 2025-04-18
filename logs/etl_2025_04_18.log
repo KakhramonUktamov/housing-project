@@ -1,0 +1,26 @@
+2025-04-18 09:52:56,438 | INFO |  Starting parallel ETL execution by country
+2025-04-18 09:52:56,440 | INFO | Starting ETL for Uzbekistan
+2025-04-18 09:52:56,441 | INFO | Running: run_uzb_flat_sale
+2025-04-18 09:53:56,099 | INFO |  Starting parallel ETL execution by country
+2025-04-18 09:53:56,101 | INFO | Starting ETL for Uzbekistan
+2025-04-18 09:53:56,101 | INFO | Running: run_uzb_flat_sale
+2025-04-18 09:54:07,398 | INFO | Completed: run_uzb_flat_sale in 11.30 seconds
+2025-04-18 09:54:07,399 | INFO | Running: run_uzb_flat_rent
+2025-04-18 09:56:08,492 | INFO |  Starting parallel ETL execution by country
+2025-04-18 09:56:08,495 | INFO | Starting ETL for Uzbekistan
+2025-04-18 09:56:08,495 | INFO | Running: run_uzb_flat_sale
+2025-04-18 10:09:27,076 | INFO | Completed: run_uzb_flat_sale in 798.58 seconds
+2025-04-18 10:09:27,080 | INFO | Running: run_uzb_flat_rent
+2025-04-18 11:25:08,633 | INFO |  Starting parallel ETL execution by country
+2025-04-18 11:25:08,635 | INFO | Starting ETL for Uzbekistan
+2025-04-18 11:25:08,635 | INFO | Running: run_uzb_flat_rent
+2025-04-18 12:24:57,177 | INFO |  Starting parallel ETL execution by country
+2025-04-18 12:24:57,179 | INFO | Starting ETL for Uzbekistan
+2025-04-18 12:24:57,179 | INFO | Running: run_uzb_flat_rent
+2025-04-18 13:21:01,598 | INFO | Completed: run_uzb_flat_rent in 3364.42 seconds
+2025-04-18 13:21:01,599 | INFO | Running: run_uzb_office_sale
+2025-04-18 13:29:53,428 | INFO | Completed: run_uzb_office_sale in 531.83 seconds
+2025-04-18 13:29:53,429 | INFO | Running: run_uzb_office_rent
+2025-04-18 13:40:33,260 | INFO | Completed: run_uzb_office_rent in 639.83 seconds
+2025-04-18 13:40:33,261 | INFO | Finished ETL for Uzbekistan in 4536.08 seconds
+2025-04-18 13:40:33,261 | INFO | All ETL completed in 4536.08 seconds

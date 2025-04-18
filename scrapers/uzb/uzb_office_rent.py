@@ -1,5 +1,5 @@
 from itertools import product
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,52 +12,44 @@ locations = ['tashkent', "toshkent-oblast", "andizhanskaya-oblast", "buharskaya-
 
 pages = range(1, 26)
 
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+}
+
 page_links = [
     url_template.format(location=loc, page=pg)
     for loc, pg in product(locations, pages)
 ]
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-}
-
-
-def fetch_office_links(page_link):
+def get_flat_links(page_link):
+    flat_links = []
     try:
-        response = requests.get(page_link, headers=headers, timeout=10)
+        response = requests.get(page_link, headers=headers, timeout=5)
         soup = BeautifulSoup(response.content, "html.parser")
 
         cards = soup.find_all("div", class_="css-l9drzq")
-        links = []
-
         for card in cards:
             link_tag = card.find("a", class_="css-1tqlkj0")
             loc_tag = card.find("p", class_="css-vbz67q")
 
-            if not link_tag:
-                continue
-
-            flat_url = "https://www.olx.uz{}".format(link_tag['href'])
-            loc_text = loc_tag.get_text(strip=True) if loc_tag else None
-
-            links.append({
-                "flat": flat_url,
-                "location": loc_text
-            })
-
-        return links
+            if link_tag:
+                flat_url = "https://www.olx.uz{}".format(link_tag['href'])
+                location = loc_tag.get_text(strip=True) if loc_tag else None
+                flat_links.append({
+                    "flat": flat_url,
+                    "location": location
+                })
     except Exception as e:
-        print(f"Error fetching page {page_link}: {e}")
-        return []
+        print(f"Error getting page {page_link}: {e}")
+    return flat_links
 
 
-def fetch_office_details(item):
+def scrape_flat_details(item):
     try:
         response = requests.get(item["flat"], headers=headers, timeout=10)
         soup = BeautifulSoup(response.content, "html.parser")
 
         title = [i.text for i in soup.find_all("p", class_="css-1los5bp")]
-
         price_div = soup.find("div", class_="css-e2ir3r")
         price = price_div.get_text(strip=True) if price_div else None
 
@@ -67,21 +59,24 @@ def fetch_office_details(item):
             "loc": item["location"]
         }
     except Exception as e:
-        print(f"Error fetching listing {item['flat']}: {e}")
+        print(f"Error fetching flat {item['flat']}: {e}")
         return None
 
 
 def uzb_office_rent():
-    flat_links = []
-    # Step 1: Fetch all listing URLs
+    # Step 1: Collect all flat links
+    all_flat_links = []
     with ThreadPoolExecutor(max_workers=20) as executor:
-        for links in executor.map(fetch_office_links, page_links):  # test limit
-            flat_links.extend(links)
+        futures = [executor.submit(get_flat_links, link) for link in page_links]
+        for future in as_completed(futures):
+            all_flat_links.extend(future.result())
 
+    # Step 2: Fetch flat details concurrently
     results = []
-    # Step 2: Fetch listing details
     with ThreadPoolExecutor(max_workers=20) as executor:
-        for result in executor.map(fetch_office_details, flat_links):
+        futures = [executor.submit(scrape_flat_details, item) for item in all_flat_links]
+        for future in as_completed(futures):
+            result = future.result()
             if result:
                 results.append(result)
 

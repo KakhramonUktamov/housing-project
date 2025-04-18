@@ -81,25 +81,25 @@ from loaders.uzb.load_uzb_office_rent import uzb_office_rent_loader
 
 #Russian Apartment Sale
 def run_rus_flat_sale():
-    raw_data = rus_flat_sale(max_pages=2)
+    raw_data = rus_flat_sale()
     cleaned_data = rus_flat_sale_clean(raw_data)
     rus_flat_sale_loader(cleaned_data)
 
 #Russian Flat Rent
 def run_rus_flat_rent():
-    raw_data = rus_flat_rent(max_pages=2)
+    raw_data = rus_flat_rent()
     clean_data = rus_flat_rent_clean(raw_data)
     rus_flat_rent_loader(clean_data)
 
 #Russian Office Sale
 def run_rus_office_sale():
-    raw_data = rus_office_sale(max_pages=2)
+    raw_data = rus_office_sale()
     clean_data = rus_office_sale_clean(raw_data)
     rus_office_sale_loader(clean_data)
 
 #Russian Office Rent
 def run_rus_office_rent():
-    raw_data = rus_office_rent(max_pages=2)
+    raw_data = rus_office_rent()
     clean_data = rus_office_rent_clean(raw_data)
     rus_office_rent_loader(clean_data)
 

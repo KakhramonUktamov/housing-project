@@ -67,8 +67,6 @@ def date_clean(info: str, current_date: datetime = None) -> tuple:
 
     return None
 
-import re
-
 def size_clean(info_list):
     for item in info_list:
         if "общая площадь" in item.lower():
