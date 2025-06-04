@@ -1,43 +1,19 @@
-from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
-from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
-from loaders.uzb.load_uzb_flat_sale import uzb_flat_sale_loader
+import requests
+from datetime import datetime
+import re
+from bs4 import BeautifulSoup
 
-from scrapers.uzb.uzb_flat_rent import uzb_flat_rent
-from transformers.uzb.uzb_flat_rent_cleaner import uzb_flat_rent_clean
-from loaders.uzb.load_uzb_flat_rent import uzb_flat_rent_loader
+url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To={}"
+response = requests.get(url)
+data = BeautifulSoup(response.content, 'html.parser')
+currency = data.find("p", class_="sc-708e65be-1 chuBHG").get_text()
 
-from scrapers.uzb.uzb_office_sale import uzb_office_sale
-from transformers.uzb.uzb_office_sale_cleaner import uzb_office_sale_clean
-from loaders.uzb.load_uzb_office_sale import uzb_office_sale_loader
+def extract_numeric_value(price_str: str) -> float:
+    number_part = re.findall(r"[\d.,]+", price_str)
+    if number_part:
+        cleaned = number_part[0].replace(",", "")
+        return float(cleaned)
+    else:
+        return 0.0
 
-from scrapers.uzb.uzb_office_rent import uzb_office_rent
-from transformers.uzb.uzb_office_rent_cleaner import uzb_office_rent_clean
-from loaders.uzb.load_uzb_office_rent import uzb_office_rent_loader
 
-
-#Uzbekistan Flat Sale
-def run_uzb_flat_sale():
-    raw_data = uzb_flat_sale()
-    clean_data = uzb_flat_sale_clean(raw_data)
-    uzb_flat_sale_loader(clean_data)
-
-if __name__ =="__main__":
-    run_uzb_flat_sale()
-
-# #Uzbekistan Flat Rent
-# def run_uzb_flat_rent():
-#     raw_data = uzb_flat_rent()
-#     clean_data = uzb_flat_rent_clean(raw_data)
-#     uzb_flat_rent_loader(clean_data)
-
-# #Uzbekistan Office Sale
-# def run_uzb_office_sale():
-#     raw_data = uzb_office_sale()
-#     clean_data = uzb_office_sale_clean(raw_data)
-#     uzb_office_sale_loader(clean_data)
-
-# #Uzbekistan Office Rent
-# def run_uzb_office_rent():
-#     raw_data = uzb_office_rent()
-#     clean_data = uzb_office_rent_clean(raw_data)
-#     uzb_office_rent_loader(clean_data)

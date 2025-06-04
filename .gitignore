@@ -1,0 +1,21 @@
+# Ignore environment variables and credentials
+config/.env
+
+# Ignore Python cache
+__pycache__/
+*/__pycache__/
+
+# Ignore log files
+logs/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+
+# VS Code settings
+.vscode/

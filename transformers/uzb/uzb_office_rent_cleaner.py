@@ -1,7 +1,19 @@
 import pandas as pd
 import re
 from datetime import datetime, timedelta
+from currency_utils import get_currency
 
+currency=get_currency("USD","UZS")
+
+def convert_to_usd(price, currency_type, currency_rate):
+    if not price or not currency_type:
+        return None
+    if "сум" in currency_type:
+        return round(price / currency_rate, 2)
+    elif "сумДоговорная" in currency_type:
+        return round(price / currency_rate, 2)
+    else:
+        return price
 def price_clean(text):
     if not text:
         return None
@@ -111,14 +123,15 @@ def location_clean(text):
 def uzb_office_rent_clean(raw_data):
     df = pd.DataFrame(raw_data)
 
-    df['price'] = df['price_info'].apply(price_clean)
+    df['price_uzs'] = df['price_info'].apply(price_clean)
+    df['currency'] = df['price_info'].apply(currency_clean)
+    df['price'] = df.apply(lambda row: convert_to_usd(row['price_uzs'], row['currency'], currency), axis=1)
     df['location'] = df['loc'].apply(location_clean)
     df['house_floor'] = df['title'].apply(floor_clean)
     df['total_floor'] = df['title'].apply(house_floor)
     df['size'] = df['title'].apply(size_clean)
     df['date'] = df['loc'].apply(date_clean)
-    df['currency'] = df['price_info'].apply(currency_clean)
     df['scrape_date'] = datetime.now().date()
-    df = df.drop(["title","loc","price_info"], axis=1)
+    df = df.drop(["title","loc","price_info","price_uzs"], axis=1)
     
     return df
