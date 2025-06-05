@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 from datetime import datetime, timedelta
-from currency_utils import get_currency
+from transformers.currency_utils import get_currency
 
 currency=get_currency("USD","UZS")
 
@@ -22,15 +22,6 @@ def price_clean(text):
         return int(re.sub(r"[^\d]", "", text))
     except ValueError:
         return None
-
-
-def extract_numeric_value(price_str: str) -> float:
-    number_part = re.findall(r"[\d.,]+", price_str)
-    if number_part:
-        cleaned = number_part[0].replace(",", "")
-        return float(cleaned)
-    else:
-        return 0.0
     
 def currency_clean(text):
     if not text:
@@ -137,6 +128,16 @@ def location_clean(text):
     except Exception:
         return None
 
+def remove_outliers(df, columns):
+    for column in columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    return df
+
 
 def uzb_flat_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
@@ -152,5 +153,7 @@ def uzb_flat_sale_clean(raw_data):
     df['date'] = df['loc'].apply(date_clean)
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","loc","price_info","price_uzs"], axis=1)
+    df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
+    df['room'] = df[(df['room']>=1) & (df['room']<=6)]['room']
     
     return df

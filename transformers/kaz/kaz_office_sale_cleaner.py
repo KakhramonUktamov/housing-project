@@ -1,21 +1,9 @@
 import pandas as pd
 import re
 from datetime import datetime, timedelta
-import requests
-from bs4 import BeautifulSoup
+from transformers.currency_utils import get_currency
 
-url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=KZT"
-response = requests.get(url)
-data = BeautifulSoup(response.content, 'html.parser')
-currency = data.find("p", class_="sc-708e65be-1 chuBHG").get_text()
-
-def extract_numeric_value(price_str: str) -> float:
-    number_part = re.findall(r"[\d.,]+", price_str)
-    if number_part:
-        cleaned = number_part[0].replace(",", "")
-        return float(cleaned)
-    else:
-        return 0.0
+currency=get_currency("USD","KZT")
 
 
 def price_clean(text):
@@ -99,14 +87,25 @@ def date_clean(text, reference_date=None):
     return None
 
 
+def remove_outliers(df, columns):
+    for column in columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    return df
+
 def kaz_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
 
-    df['price'] = df['price_info'].apply(price_clean)
+    df['price'] = round(df['price_info'].apply(price_clean)/currency, 2)
     df['size'] = df['title'].apply(size_clean)
     df['date'] = df['date'].apply(date_clean)
     df['currency'] = df['price_info'].apply(currency_clean)
     df['scrape_date'] = datetime.now().date()
-    df = df.drop(["title", "price_info"], axis=1)
+    df = df.drop(["title","price_info"], axis=1)
+    df = remove_outliers(df, ['price', 'size'])
     
     return df

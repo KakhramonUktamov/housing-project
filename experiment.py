@@ -3,17 +3,10 @@ from datetime import datetime
 import re
 from bs4 import BeautifulSoup
 
-url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To={}"
-response = requests.get(url)
-data = BeautifulSoup(response.content, 'html.parser')
-currency = data.find("p", class_="sc-708e65be-1 chuBHG").get_text()
+from scrapers.uzb.uzb_flat_sale import uzb_flat_sale
+from transformers.uzb.uzb_flat_sale_cleaner import uzb_flat_sale_clean
+from loaders.uzb.load_uzb_flat_sale import uzb_flat_sale_loader
 
-def extract_numeric_value(price_str: str) -> float:
-    number_part = re.findall(r"[\d.,]+", price_str)
-    if number_part:
-        cleaned = number_part[0].replace(",", "")
-        return float(cleaned)
-    else:
-        return 0.0
-
-
+data = uzb_flat_sale()
+cleaned_data = uzb_flat_sale_clean(data)
+uzb_flat_sale_loader(cleaned_data)

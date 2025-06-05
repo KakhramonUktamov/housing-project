@@ -1,15 +1,19 @@
 import pandas as pd
 import re
 from datetime import datetime, timedelta
-import requests
-from bs4 import BeautifulSoup
+from transformers.currency_utils import get_currency
 
-url = "https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=UZS"
-response = requests.get(url)
-data = BeautifulSoup(response.content, 'html.parser')
-currency = data.find("p", class_="sc-708e65be-1 chuBHG").get_text()
-currency_rate = float(re.sub(r"[^\d.]", "", currency))
+currency=get_currency("USD","UZS")
 
+def convert_to_usd(price, currency_type, currency_rate):
+    if not price or not currency_type:
+        return None
+    if "сум" in currency_type:
+        return round(price / currency_rate, 2)
+    elif "сумДоговорная" in currency_type:
+        return round(price / currency_rate, 2)
+    else:
+        return price
 
 def price_clean(text):
     if not text:
@@ -25,17 +29,6 @@ def currency_clean(text):
         return None
     match = re.search(r"[^\d\s]+", text)
     return match.group(0) if match else None
-
-def convert_to_usd(price, currency_type, currency_rate):
-    if not price or not currency_type:
-        return None
-    if "сум" in currency_type:
-        return round(price / currency_rate, 2)
-    elif "сумДоговорная" in currency_type:
-        return round(price / currency_rate, 2)
-    else:
-        return price
-
 
 
 MONTHS_RU = {
@@ -130,12 +123,23 @@ def location_clean(text):
         return None
 
 
+def remove_outliers(df, columns):
+    for column in columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    return df
+
+
 def uzb_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
 
     df['price_uzs'] = df['price_info'].apply(price_clean)
     df['currency'] = df['price_info'].apply(currency_clean)
-    df['price'] = df.apply(lambda row: convert_to_usd(row['price_uzs'], row['currency'], currency_rate), axis=1)
+    df['price'] = df.apply(lambda row: convert_to_usd(row['price_uzs'], row['currency'], currency), axis=1)
     df['location'] = df['loc'].apply(location_clean)
     df['house_floor'] = df['title'].apply(floor_clean)
     df['total_floor'] = df['title'].apply(house_floor)
@@ -143,5 +147,6 @@ def uzb_office_sale_clean(raw_data):
     df['date'] = df['loc'].apply(date_clean)
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","loc","price_info","price_uzs"], axis=1)
-    
+    df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
+
     return df
