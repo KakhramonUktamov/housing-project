@@ -148,5 +148,6 @@ def uzb_office_sale_clean(raw_data):
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","loc","price_info","price_uzs"], axis=1)
     df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
-
+    df = df.drop_duplicates()
+    
     return df

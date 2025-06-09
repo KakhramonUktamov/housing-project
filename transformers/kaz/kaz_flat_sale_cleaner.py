@@ -125,6 +125,7 @@ def kaz_flat_sale_clean(raw_data):
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","price_info"], axis=1)
     df = remove_outliers(df, ['price', 'size', 'house_floor'])
-    df['room'] = df[(df['room'] >= 1) & (df['room'] <= 6)]['room']
+    df = df[(df['room'] >= 1) & (df['room'] <= 6)]
+    df = df.drop_duplicates()
     
     return df

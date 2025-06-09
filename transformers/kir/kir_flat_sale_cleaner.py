@@ -82,7 +82,15 @@ def date_clean(text, reference_time=None):
 
     return None
 
-
+def remove_outliers(df, columns):
+    for column in columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    return df
 
 def kir_flat_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
@@ -97,5 +105,8 @@ def kir_flat_sale_clean(raw_data):
     df['currency'] = df['price_info'].apply(currency_clean)
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","location_hs","price_info"], axis=1)
+    df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
+    df = df[(df['room'] >= 1) & (df['room'] <= 6)]
+    df = df.drop_duplicates()
     
     return df

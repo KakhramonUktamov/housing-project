@@ -43,28 +43,28 @@ def rus_office_rent(max_pages=100):
 
         try:
             WebDriverWait(driver, 25).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "iva-item-root-Se7z4"))
+                EC.presence_of_element_located((By.CLASS_NAME, "iva-item-root-XBsVL"))
             )
         except Exception:
             continue
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
-        cards = soup.find_all("div", class_="iva-item-root-Se7z4")
+        cards = soup.find_all("div", class_="iva-item-root-XBsVL")
 
         for card in cards:
             try:
-                title_tag = card.find("div", class_="iva-item-title-CdRXl")
-                price_tag = card.find("div", class_="price-priceContent-kPm_N")
-                price_sqm_block = card.find("div", class_="iva-item-priceStep-TIzu3")
+                title_tag = card.find("div", class_="iva-item-title-KE8A9")
+                price_tag = card.find("div", class_="price-priceContent-I4I3p")
+                price_sqm_block = card.find("div", class_="iva-item-priceStep-TVego")
                 price_sqm = None
 
                 if price_sqm_block:
-                    p_tags = price_sqm_block.find_all("p", class_="styles-module-root-s4tZ2")
+                    p_tags = price_sqm_block.find_all("p", class_="styles-module-root-PY1ie")
                     if len(p_tags) > 1:
                         price_sqm = clean_text(p_tags[1].get_text())
 
-                location_tag = card.find("div", class_="geo-root-NrkbV")
-                date_tag = card.find("div", class_="iva-item-dateInfoStep-qcDJA")
+                location_tag = card.find("div", class_="geo-root-BBVai")
+                date_tag = card.find("div", class_="iva-item-dateInfoStep-AoWrh")
 
                 result = {
                     "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
@@ -75,6 +75,7 @@ def rus_office_rent(max_pages=100):
                 }
 
                 results.append(result)
+
 
             except Exception as e:
                 continue

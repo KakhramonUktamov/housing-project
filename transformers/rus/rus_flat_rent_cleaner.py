@@ -2,7 +2,9 @@ import pandas as pd
 import re
 from datetime import datetime
 import dateparser
+from transformers.currency_utils import get_currency
 
+currency=get_currency("USD","RUB")
 
 def clean_room(text):
     if not text:
@@ -75,12 +77,22 @@ def clean_location(text):
         loc = loc.replace(short, full)
     return loc
 
+def remove_outliers(df, columns):
+    for column in columns:
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    return df
+
 
 def rus_flat_rent_clean(raw_data):
     df = pd.DataFrame(raw_data)
     df['room'] = df['title'].apply(clean_room)
     df['size'] = df['title'].apply(clean_size)
-    df['price'] = df['price_info'].apply(clean_price)
+    df['price'] = round(df['price_info'].apply(clean_price)/currency, 2)
     df['currency'] = df['price_info'].apply(clean_currency)
     df['house_floor'] = df['title'].apply(clean_house_floor)
     df['total_floor'] = df['title'].apply(clean_total_floor)
@@ -88,5 +100,8 @@ def rus_flat_rent_clean(raw_data):
     df['location'] = df['location'].apply(clean_location)
     df['scrape_date'] = datetime.now().date()
     df.drop(columns=['title',"price_info"], inplace=True, errors='ignore')
+    df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
+    df = df[(df['room'] >= 1) & (df['room'] <= 6)]
+    df = df.drop_duplicates()
 
     return df

@@ -97,7 +97,8 @@ def room_clean(info_list):
     for item in info_list:
         if "количество комнат" in item.lower():
             try:
-                return int(item.split(":")[1].strip())
+                if ":" in item:
+                    return int(item.split(":")[1].strip())
             except:
                 return None
     return None
@@ -106,7 +107,8 @@ def floor_clean(info_list):
     for item in info_list:
         if item.lower().startswith("этаж:"):
             try:
-                return int(item.split(":")[1].strip())
+                if ":" in item:
+                    return int(item.split(":")[1].strip())
             except:
                 return None
     return None
@@ -115,7 +117,8 @@ def house_floor(info_list):
     for item in info_list:
         if "этажность дома" in item.lower():
             try:
-                return int(item.split(":")[1].strip())
+                if ":" in item:
+                    return int(item.split(":")[1].strip())
             except:
                 return None
     return None
@@ -154,6 +157,7 @@ def uzb_flat_sale_clean(raw_data):
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","loc","price_info","price_uzs"], axis=1)
     df = remove_outliers(df, ['price', 'size', 'house_floor', 'total_floor'])
-    df['room'] = df[(df['room']>=1) & (df['room']<=6)]['room']
+    df = df[(df['room'] >= 1) & (df['room'] <= 6)]
+    df = df.drop_duplicates()
     
     return df

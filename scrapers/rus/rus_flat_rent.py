@@ -43,31 +43,30 @@ def rus_flat_rent(max_pages=100):
 
         try:
             WebDriverWait(driver, 25).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "iva-item-root-Se7z4"))
+                EC.presence_of_element_located((By.CLASS_NAME, "iva-item-root-XBsVL"))
             )
         except Exception:
             continue
 
         soup = BeautifulSoup(driver.page_source, "html.parser")
-        cards = soup.find_all("div", class_="iva-item-root-Se7z4")
+        cards = soup.find_all("div", class_="iva-item-root-XBsVL")
 
         for card in cards:
-            try:
-                title_tag = card.find("div", class_="iva-item-title-CdRXl")
-                price_tag = card.find("div", class_="price-priceContent-kPm_N")
-                location_tag = card.find("div", class_="geo-root-NrkbV")
-                date_tag = card.find("div", class_="iva-item-dateInfoStep-qcDJA")
+                try:
+                    title_tag = card.find("div", class_="iva-item-title-KE8A9")
+                    price_tag = card.find("div", class_="price-priceContent-I4I3p")
+                    location_tag = card.find("div", class_="geo-root-BBVai")
+                    date_tag = card.find("div", class_="iva-item-dateInfoStep-AoWrh")
 
-                result = {
-                    "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
-                    "price_info": clean_text(price_tag.get_text()) if price_tag else "N/A",
-                    "location": clean_text(location_tag.get_text()) if location_tag else "N/A",
-                    "date": clean_text(date_tag.get_text()) if date_tag else "N/A",
-                }
-                results.append(result)
-
-            except Exception as e:
-                continue
+                    result = {
+                        "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
+                        "price_info": clean_text(price_tag.get_text()) if price_tag else "N/A",
+                        "location": clean_text(location_tag.get_text()) if location_tag else "N/A",
+                        "date": clean_text(date_tag.get_text()) if date_tag else "N/A",
+                    }
+                    results.append(result)
+                except Exception as e:
+                    continue
 
         time.sleep(random.uniform(3, 6))
 

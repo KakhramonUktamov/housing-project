@@ -107,5 +107,6 @@ def kaz_office_rent_clean(raw_data):
     df['scrape_date'] = datetime.now().date()
     df = df.drop(["title","price_info"], axis=1)
     df = remove_outliers(df, ['price', 'size'])
+    df = df.drop_duplicates()
     
     return df
