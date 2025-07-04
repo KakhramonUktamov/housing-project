@@ -29,7 +29,7 @@ def get_flat_links(page_link):
         response = requests.get(page_link, headers=headers, timeout=5)
         soup = BeautifulSoup(response.content, "html.parser")
 
-        cards = soup.find_all("div", class_="css-l9drzq")
+        cards = soup.find_all("div", class_="css-1r93q13")
         for card in cards:
             link_tag = card.find("a", class_="css-1tqlkj0")
             loc_tag = card.find("p", class_="css-vbz67q")

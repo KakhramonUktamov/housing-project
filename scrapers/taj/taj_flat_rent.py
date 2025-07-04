@@ -22,7 +22,7 @@ def taj_flat_rent():
             response = requests.get(page_url, timeout=10)
             response.raise_for_status()
             soup = BeautifulSoup(response.content, "html.parser")
-            cards = soup.find_all("div", class_="advert js-item-listing")
+            cards = soup.find_all("div", class_="advert__section")
         except:
             continue
 

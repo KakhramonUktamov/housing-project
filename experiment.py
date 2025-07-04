@@ -1,77 +1,38 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
-import re
-import random
+import requests
 
+url = "https://somon.tj/nedvizhimost/prodazha-kvartir/?page={}"
 
-def clean_text(text):
-    if not text:
-        return "N/A"
-    try:
-        cleaned_text =re.sub(r"\s+", " ", text.replace("\xa0", " ").replace("\u202f", " ")).strip()
-        return cleaned_text
-    except Exception:
-        return "N/A"
+results = []
 
+try:
+    page = requests.get(url.format(1), timeout=10)
+    page.raise_for_status()
+    page_soup = BeautifulSoup(page.content, 'html.parser')
+    max_page = int(page_soup.find_all("a", class_="page-number js-page-filter")[-1].text)
+except:
+    max_page = 1
 
+flat_pages = [url.format(index) for index in range(1, max_page + 1)]
 
-def rus_flat_sale(max_pages=100):
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("user-agent=Mozilla/5.0")
+page_url = flat_pages[2]
+response = requests.get(page_url, timeout=10)
+response.raise_for_status()
+soup = BeautifulSoup(response.content, "html.parser")
+cards = soup.find_all("div", class_="advert__section")
+   
 
-    driver = webdriver.Chrome(options=options)
-    results = []
+card = cards[2]
+price = card.find("div", class_="advert__content-header").get_text(strip=True).split(".")[0]
+title = card.find("a", class_="advert__content-title").get_text(strip=True)
+date = card.find("div", class_="advert__content-date").get_text(strip=True)
+location = card.find("div", class_="advert__content-place").get_text(strip=True)
 
-    for page in range(1, max_pages + 1):
-        url = f"https://www.avito.ru/all/kvartiry/prodam-ASgBAgICAUSSA8YQ?context=&p={page}&s=104"
-
-        for attempt in range(2):  # Try twice if needed
-            try:
-                driver.set_page_load_timeout(50)
-                driver.get(url)
-                break
-            except Exception as e:
-                if attempt == 1:
-                    continue
-
-        try:
-            WebDriverWait(driver, 25).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "iva-item-root-XBsVL"))
-            )
-        except Exception:
-            continue
-
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        cards = soup.find_all("div", class_="iva-item-root-XBsVL")
-
-        for card in cards:
-                try:
-                    title_tag = card.find("div", class_="iva-item-title-KE8A9")
-                    price_tag = card.find("div", class_="price-priceContent-I4I3p")
-                    location_tag = card.find("div", class_="geo-root-BBVai")
-                    date_tag = card.find("div", class_="iva-item-dateInfoStep-AoWrh")
-
-                    result = {
-                        "title": clean_text(title_tag.get_text()) if title_tag else "N/A",
-                        "price_info": clean_text(price_tag.get_text()) if price_tag else "N/A",
-                        "location": clean_text(location_tag.get_text()) if location_tag else "N/A",
-                        "date": clean_text(date_tag.get_text()) if date_tag else "N/A",
-                    }
-                    results.append(result)
-                except Exception as e:
-                    continue
-
-        time.sleep(random.uniform(3, 6))
-
-    driver.quit()
-    print(f"Total listings scraped: {len(results)}")
-    return results
-
-data = rus_flat_sale(max_pages=1)
+result = {
+    "price_info": price,
+    "title": title,
+    "date": date,
+    "location": location
+    }
+results.append(result)

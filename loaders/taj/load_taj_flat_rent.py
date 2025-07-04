@@ -1,11 +1,12 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
+from pathlib import Path
 
 def taj_flat_rent_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="config/.env")
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / "config" / ".env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(

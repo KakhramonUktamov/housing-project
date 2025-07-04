@@ -3,11 +3,12 @@ import json
 import psycopg2
 import pandas as pd
 from dotenv import load_dotenv
+from pathlib import Path
 
 def rus_office_rent_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="config/.env")
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / "config" / ".env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(

@@ -74,7 +74,7 @@ def remove_outliers(df, columns):
 def rus_office_sale_clean(raw_data):
     df = pd.DataFrame(raw_data)
     df['price'] = round(df['price_info'].apply(clean_price)/currency, 2)
-    df['price_sqm'] = df['price_sqm'].apply(clean_price_sqm)
+    df['price_sqm'] = round(df['price_sqm'].apply(clean_price_sqm)/currency,2)
     df['size'] = df['price']/df['price_sqm']
     df['currency'] = df['price_info'].apply(clean_currency)
     df['date'] = df['date'].apply(clean_date)

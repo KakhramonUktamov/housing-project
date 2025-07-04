@@ -2,6 +2,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 import math
+from pathlib import Path
 
 def clean_value(val):
     if isinstance(val, float) and math.isnan(val):
@@ -11,7 +12,7 @@ def clean_value(val):
 def uzb_office_sale_loader(raw_data):
     
     # Load .env config
-    load_dotenv(dotenv_path="config/.env")
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / "config" / ".env")
 
     # Connect to PostgreSQL
     conn = psycopg2.connect(

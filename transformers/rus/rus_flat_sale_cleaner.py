@@ -19,7 +19,7 @@ def clean_size(text):
     if not text:
         return None
     try:
-        # Normalize text (replace commas with dots, and handle different square meter symbols)
+        # Normalize text (replace commas with dots, and handle different square meter symbol)
         text = text.replace(",", ".").replace("\xa0", " ").replace("\u202f", " ")
         match = re.search(r"(\d+(?:\.\d+)?)\s*(м²|м2)", text, re.IGNORECASE)
         return float(match.group(1)) if match else None
